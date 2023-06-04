@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
 using SuperheroAPI.Service.SuperheroService;
 
@@ -30,7 +29,7 @@ public class SuperheroController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Superhero>> GetSingleHero(int id)
     {
-        var result = _superheroService.GetSingleHero(id);
+        var result = await _superheroService.GetSingleHero(id);
         if (result is null)
         {
             return NotFound("Superhero doesn't exist.");
@@ -42,7 +41,7 @@ public class SuperheroController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<List<Superhero>>> AddHero(Superhero superhero)
     {
-        var result = _superheroService.AddHero(superhero);
+        var result = await _superheroService.AddHero(superhero);
 
         return Ok(result);
     }
@@ -50,7 +49,7 @@ public class SuperheroController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<List<Superhero>>> UpdateHero(int id, Superhero request)
     {
-        var result = _superheroService.UpdateHero(id, request);
+        var result = await _superheroService.UpdateHero(id, request);
         if (result is null)
         {
             return NotFound("Superhero ID not found.");
@@ -61,7 +60,7 @@ public class SuperheroController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<List<Superhero>>> DeleteHero(int id)
     {
-        var result = _superheroService.DeleteHero(id);
+        var result = await _superheroService.DeleteHero(id);
         if (result is null)
         {
             return NotFound("Superhero ID not found.");

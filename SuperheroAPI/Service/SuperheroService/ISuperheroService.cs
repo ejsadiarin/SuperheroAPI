@@ -3,10 +3,10 @@ namespace SuperheroAPI.Service.SuperheroService;
 public interface ISuperheroService
 {
     Task<List<Superhero>> GetAllHeroes();
-    Superhero? GetSingleHero(int id);
+    Task<Superhero?> GetSingleHero(int id);
 
-    List<Superhero>? AddHero(Superhero superhero);
-    List<Superhero>? UpdateHero(int id, Superhero request);
+    Task<List<Superhero>?> AddHero(Superhero superhero);
+    Task<List<Superhero>?> UpdateHero(int id, Superhero request);
 
-    List<Superhero>? DeleteHero(int id);
+    Task<List<Superhero>?> DeleteHero(int id);
 }

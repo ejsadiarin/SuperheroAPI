@@ -12,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // register ISuperheroService, and use SuperheroService (Dependency Injection)
 builder.Services.AddScoped<ISuperheroService, SuperheroService>();
+// register a database of shape DataContext
 builder.Services.AddDbContext<DataContext>();
 
 var app = builder.Build();

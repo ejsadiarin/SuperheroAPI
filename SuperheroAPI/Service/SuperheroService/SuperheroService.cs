@@ -6,11 +6,12 @@ namespace SuperheroAPI.Service.SuperheroService;
 public class SuperheroService : ISuperheroService
 {
     private readonly DataContext _context;
+
     public SuperheroService(DataContext context)
     {
         _context = context;
     }
-    
+
     private static List<Superhero> superheroes = new List<Superhero>
     {
         new Superhero
@@ -37,9 +38,9 @@ public class SuperheroService : ISuperheroService
         return heroes;
     }
 
-    public Superhero? GetSingleHero(int id)
+    public async Task<Superhero?> GetSingleHero(int id)
     {
-        var hero = superheroes.Find(superhero => superhero.Id == id);
+        var hero = await _context.Superheros.FindAsync(id);
         if (hero is null)
         {
             return null;
@@ -48,29 +49,38 @@ public class SuperheroService : ISuperheroService
         return hero;
     }
 
-    public List<Superhero> AddHero(Superhero superhero)
+    public async Task<List<Superhero>?> AddHero(Superhero superhero)
     {
-        superheroes.Add(superhero);
-        return superheroes;
+        _context.Superheros.Add(superhero);
+        // tell EF to save changes to database
+        await _context.SaveChangesAsync();
+
+        // Output all from database with new changes
+        var heroes = await _context.Superheros.ToListAsync();
+        return heroes;
     }
 
-    public List<Superhero>? DeleteHero(int id)
+    public async Task<List<Superhero>?> DeleteHero(int id)
     {
-        // Find specific superhero in superheroes List
-        var hero = superheroes.Find(superhero => superhero.Id == id);
+        // Find specific superhero via ID in the Superheros database
+        var hero = await _context.Superheros.FindAsync(id);
         if (hero is null)
         {
             return null;
         }
 
-        superheroes.Remove(hero);
+        _context.Superheros.Remove(hero);
+        // tell EF to save changes to database
+        await _context.SaveChangesAsync();
 
-        return superheroes;
+        // Output all from database with new changes
+        var heroes = await _context.Superheros.ToListAsync();
+        return heroes;
     }
 
-    public List<Superhero>? UpdateHero(int id, Superhero request)
+    public async Task<List<Superhero>?> UpdateHero(int id, Superhero request)
     {
-        var hero = superheroes.Find(superhero => superhero.Id == id);
+        var hero = await _context.Superheros.FindAsync(id);
         if (hero is null)
         {
             return null;
@@ -83,6 +93,11 @@ public class SuperheroService : ISuperheroService
         hero.LastName = request.LastName;
         hero.Place = request.Place;
 
-        return superheroes;
+        // tell EF to save changes to database
+        await _context.SaveChangesAsync();
+
+        // Output all from database with new changes
+        var heroes = await _context.Superheros.ToListAsync();
+        return heroes;
     }
 }
