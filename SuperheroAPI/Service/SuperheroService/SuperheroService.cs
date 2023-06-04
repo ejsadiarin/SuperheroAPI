@@ -1,9 +1,16 @@
+using SuperheroAPI.Data;
 using SuperheroAPI.Model;
 
 namespace SuperheroAPI.Service.SuperheroService;
 
 public class SuperheroService : ISuperheroService
 {
+    private readonly DataContext _context;
+    public SuperheroService(DataContext context)
+    {
+        _context = context;
+    }
+    
     private static List<Superhero> superheroes = new List<Superhero>
     {
         new Superhero
@@ -24,9 +31,10 @@ public class SuperheroService : ISuperheroService
         },
     };
 
-    public List<Superhero> GetAllHeroes()
+    public async Task<List<Superhero>> GetAllHeroes()
     {
-        return superheroes;
+        var heroes = await _context.Superheros.ToListAsync();
+        return heroes;
     }
 
     public Superhero? GetSingleHero(int id)

@@ -21,8 +21,10 @@ public class SuperheroController : ControllerBase
     // public async Task<IActionResult> GetAllHeroes()
     public async Task<ActionResult<List<Superhero>>> GetAllHeroes()
     {
-        var result = _superheroService.GetAllHeroes();
+        var result = await _superheroService.GetAllHeroes();
         return Ok(result);
+        
+        // can just be: return await _superheroService.GetALlHeroes();
     }
 
     [HttpGet("{id}")]

@@ -2,7 +2,7 @@ namespace SuperheroAPI.Service.SuperheroService;
 
 public interface ISuperheroService
 {
-    List<Superhero> GetAllHeroes();
+    Task<List<Superhero>> GetAllHeroes();
     Superhero? GetSingleHero(int id);
 
     List<Superhero>? AddHero(Superhero superhero);
