@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
-using SuperheroAPI.Model;
+using SuperheroAPI.Service.SuperheroService;
 
 namespace SuperheroAPI.Controllers;
 
@@ -8,83 +8,62 @@ namespace SuperheroAPI.Controllers;
 [Route("api/[controller]")]
 public class SuperheroController : ControllerBase
 {
-    private static List<Superhero> superheroes = new List<Superhero>
+    private readonly ISuperheroService _superheroService;
+
+    public SuperheroController(ISuperheroService superheroService)
     {
-        new Superhero
-        {
-            Id = 1,
-            Name = "Spider Man",
-            FirstName = "Peter",
-            LastName = "Parker",
-            Place = "New York City"
-        },
-        new Superhero
-        {
-            Id = 2,
-            Name = "Iron Man",
-            FirstName = "Tony",
-            LastName = "Stark",
-            Place = "Malibu"
-        },
-    };
-    
+        // Dependency Injection
+        _superheroService = superheroService;
+    }
+
     // GET
     [HttpGet]
     // public async Task<IActionResult> GetAllHeroes()
     public async Task<ActionResult<List<Superhero>>> GetAllHeroes()
     {
-        return Ok(superheroes);
+        var result = _superheroService.GetAllHeroes();
+        return Ok(result);
     }
-    
+
     [HttpGet("{id}")]
     public async Task<ActionResult<Superhero>> GetSingleHero(int id)
     {
-        var hero = superheroes.Find(superhero => superhero.Id == id);
-        if (hero is null)
+        var result = _superheroService.GetSingleHero(id);
+        if (result is null)
         {
-            return NotFound("This superhero doesn't exist.");
+            return NotFound("Superhero doesn't exist.");
         }
-        return Ok(hero);
+
+        return Ok(result);
     }
 
     [HttpPost]
     public async Task<ActionResult<List<Superhero>>> AddHero(Superhero superhero)
     {
-        superheroes.Add(superhero);
-        return Ok(superheroes);
+        var result = _superheroService.AddHero(superhero);
+
+        return Ok(result);
     }
 
     [HttpPut("{id}")]
     public async Task<ActionResult<List<Superhero>>> UpdateHero(int id, Superhero request)
     {
-        var hero = superheroes.Find(superhero => superhero.Id == id);
-        if (hero is null)
+        var result = _superheroService.UpdateHero(id, request);
+        if (result is null)
         {
-            return NotFound("Hero ID specified doesn't exist to update");
+            return NotFound("Superhero ID not found.");
         }
-
-        // TODO: make it so that you can update one field and retain other existing fields for the specific id
-        // - feature: have option to mutate only one field, and retain existing data
-        hero.Name = request.Name;
-        hero.FirstName = request.FirstName;
-        hero.LastName = request.LastName;
-        hero.Place = request.Place;
-        
-        return Ok(hero);
+        return Ok(result);
     }
-    
-    [HttpDelete]
-    public async Task<ActionResult<List<Superhero>>> DeleteHero(int id)
-     {
-         // Find specific superhero in superheroes List
-         var hero = superheroes.Find(superhero => superhero.Id == id);
-         if (hero is null)
-         {
-             return NotFound("Hero ID specified doesn't exist to update");
-         }
 
-         superheroes.Remove(hero);
-         
-         return Ok(superheroes);
-     }
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<List<Superhero>>> DeleteHero(int id)
+    {
+        var result = _superheroService.DeleteHero(id);
+        if (result is null)
+        {
+            return NotFound("Superhero ID not found.");
+        }
+        return Ok(result);
+    }
 }
