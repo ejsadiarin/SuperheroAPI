@@ -1,4 +1,5 @@
 global using SuperheroAPI.Model;
+using SuperheroAPI.Data;
 using SuperheroAPI.Service.SuperheroService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // register ISuperheroService, and use SuperheroService (Dependency Injection)
-builder.Services.AddScoped<ISuperheroService, SuperheroService>(); 
+builder.Services.AddScoped<ISuperheroService, SuperheroService>();
+builder.Services.AddDbContext<DataContext>();
 
 var app = builder.Build();
 
