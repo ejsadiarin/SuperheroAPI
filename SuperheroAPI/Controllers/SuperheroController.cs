@@ -54,7 +54,7 @@ public class SuperheroController : ControllerBase
         return Ok(superheroes);
     }
 
-    [HttpPut]
+    [HttpPut("{id}")]
     public async Task<ActionResult<List<Superhero>>> UpdateHero(int id, Superhero request)
     {
         var hero = superheroes.Find(superhero => superhero.Id == id);
@@ -63,6 +63,8 @@ public class SuperheroController : ControllerBase
             return NotFound("Hero ID specified doesn't exist to update");
         }
 
+        // TODO: make it so that you can update one field and retain other existing fields for the specific id
+        // - feature: have option to mutate only one field, and retain existing data
         hero.Name = request.Name;
         hero.FirstName = request.FirstName;
         hero.LastName = request.LastName;
