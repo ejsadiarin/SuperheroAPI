@@ -74,3 +74,4 @@ class (uses the `DataContext` class) for accessing the database
 - SQL Server
 - Swagger
 - JetBrains Rider with IdeaVim - for IDE
+  - elapsed time: 9:48:07 (yes 9 hours, 48 minutes, and 7 seconds)
